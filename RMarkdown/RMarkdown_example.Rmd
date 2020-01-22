@@ -1,0 +1,120 @@
+---
+title: "University of Groningen R Programming Class"
+author: "Robin"
+date: "16 Jan 2015"
+output: html_document
+---
+<br><br><br>
+**Assignment 1**
+
+
+A problem is that the author uses '10' as input value for the function squareGivenValue, but the text in the next line says *if you square 3, you get....*. For the line of code *val <- 3* to make any sense the author should take the *val* variable as input for the squareGivenValue(val) function, and also use it in the printed output. As the result at the end of the *cat* function the author should use the returned value of the squareGivenValue-function. Eventhough it worked without it in this case, because *val* is returned autmatically by the squareGivenValue function (since it is the last variable used), I added the return part at the end to prevent scoping. A corrected version of the code is given below:
+
+```{r}
+squareGivenValue <- function(val) {
+    val <- val ^ 2
+    return(val)
+}
+
+val <- 3
+cat("If you square", val,", you get", squareGivenValue(val))
+```
+
+<br><br><br>
+**Assignment 2**
+
+```{r}
+maxRepetitions <- function(v) {
+     repetition <- 1
+     testvector <- c(0)
+     k <- 1
+  for (i in 2:length(v)){
+    if (v[i] == v[i-1]){
+      repetition <- repetition + 1
+    }
+      else {
+        testvector[k] <- repetition
+        repetition <- 1
+        k + 1
+      }
+  i+1 
+  }
+  testvector[k+1] <- repetition    
+  return (max(testvector))
+}
+
+## for testing it:
+## maxRepetitions(repLenX)
+repLen4 <- c("a","a","a","b","b","b","b","a","a")
+repLen5 <- c("a","a","a","b","b","b","b","a","a","a","a","a")
+repLen1 <- c("a","b","a","b","a")
+
+if (maxRepetitions(repLen4) == 4) {
+    cat("maxRepetitions() gave a correct answer.")
+} else {
+    cat("maxRepetitions() gave an incorrect answer.")
+}
+
+```
+
+<br><br><br>
+**Assignment 3**
+```{r}
+birthday <- "01-06-1970"
+calcBirthdayColor <- function(bd) {
+
+    BDNumbers <- as.numeric(unlist(strsplit(bd, split = '-'))) #vector of length = 3, containing numeric values
+## I standardized the colorvalues so that the whole spectrum of the rgb color values is used.
+## Standardized color values (by 1/X -> X=31/12/100)
+    STNumbers <- rgb(0.03225806*BDNumbers[1], 0.08333333*BDNumbers[2], 0.01*(BDNumbers[3]-1915))
+  return(STNumbers) # returns the rgb value
+}
+
+
+plot(0,type="n",axes=FALSE,ylab="",xlab="", xlim=c(-10,10),ylim=c(-10,10),asp=1)
+## Some birthday color:
+rect(-10,-6,10,6,col=calcBirthdayColor(birthday))
+## And the color of someones son:
+rect(-6,-10,6,10,col=calcBirthdayColor("10-09-2013"))
+## And the color of someone else:
+rect(-4,-7,4,7,col=calcBirthdayColor("15-01-1985"))
+```
+<br>If someones birthday color is bright red, I would *guess* that his birthday is at the end of the month, at the beginning of the year and he is really old (almost 100!). So the brightest red person would be born on 31-01-1915.
+```{r, echo=FALSE}
+plot(0,type="n",axes=FALSE,ylab="",xlab="", xlim=c(-10,10),ylim=c(-10,10),asp=1)
+rect(-10,-6,10,6,col=calcBirthdayColor(birthday))
+## And the color of my hypotheical son:
+rect(-6,-10,6,10,col=calcBirthdayColor("10-09-2013"))
+## And the color of my self:
+rect(-3,-3,3,3,col=calcBirthdayColor("31-01-1915"))
+
+```
+
+
+<br><br><br>
+**Assignment 4**
+
+Run the converter(Celcius, Fahrenheit) function by entering a value for one of the two, leaving the other empty.
+
+```{r}
+converter <- function (Celcius = -999, Fahrenheit = -999){  # default values -999
+  if (Celcius != -999 && Fahrenheit != -999){
+    print("Please enter only one value at a time.")
+  }
+  else if (Celcius != -999){  
+      C2F <- ((Celcius*9)/5)+32
+      cat(Celcius, "degrees Celcius is equal to", C2F, "degrees Fahrenheit")
+  }
+  else if (Fahrenheit != -999){
+      F2C <- ((Fahrenheit - 32)*5)/9
+      cat(Fahrenheit, "degrees Fahrnheit is equal to", F2C, "degrees Celcius")
+  } 
+  else if (Fahrenheit == -999 || Celcius == -999){
+    print("Please enter the value you want to have converted")
+  }
+}
+#converter(13,)
+#converter(,54)
+#converter(12,18)
+#converter(,)
+```
